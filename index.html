@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Magazine Pre-Orders</title>
+
+    <style>
+      :root {
+        --bg: #0b0d12;
+        --text: #eef2ff;
+        --muted: rgba(238, 242, 255, 0.72);
+        --card: rgba(255, 255, 255, 0.06);
+        --border: rgba(255, 255, 255, 0.12);
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        --radius: 18px;
+        --max: 1100px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          Arial;
+        background:
+          radial-gradient(
+            1200px 800px at 15% 10%,
+            rgba(99, 102, 241, 0.2),
+            transparent 55%
+          ),
+          radial-gradient(
+            900px 700px at 90% 20%,
+            rgba(236, 72, 153, 0.14),
+            transparent 55%
+          ),
+          var(--bg);
+        color: var(--text);
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      a {
+        color: inherit;
+      }
+
+      .container {
+        width: min(var(--max), calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      /* Header */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(14px);
+        background: rgba(11, 13, 18, 0.65);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+        gap: 12px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      .mark {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .mark img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .links {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .links a {
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .links a:hover {
+        color: var(--text);
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.03);
+        text-decoration: none;
+        font-weight: 800;
+        transition:
+          transform 0.12s ease,
+          filter 0.12s ease,
+          background 0.12s ease;
+        white-space: nowrap;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .btn.primary {
+        border-color: transparent;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.95),
+          rgba(236, 72, 153, 0.9)
+        );
+        box-shadow: var(--shadow);
+      }
+      .btn.primary:hover {
+        filter: brightness(1.05);
+      }
+
+      /* Hero */
+      .hero {
+        padding: 56px 0 22px;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 22px;
+        align-items: center;
+      }
+      .pill {
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted);
+        font-weight: 800;
+        font-size: 13px;
+      }
+      h1 {
+        margin: 14px 0 12px;
+        font-size: clamp(28px, 4vw, 46px);
+        line-height: 1.06;
+        letter-spacing: -0.8px;
+      }
+      .sub {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .hero-card {
+        border-radius: calc(var(--radius) + 6px);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.08),
+          rgba(255, 255, 255, 0.03)
+        );
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .hero-card img {
+        aspect-ratio: 4/5;
+        object-fit: cover;
+        width: 100%;
+      }
+      .hero-card .cap {
+        padding: 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .small {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .strong {
+        margin: 3px 0 0;
+        font-weight: 900;
+      }
+
+      /* Sections */
+      section {
+        padding: 44px 0;
+      }
+      .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 18px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+      }
+      h2 {
+        margin: 0;
+        font-size: 26px;
+        letter-spacing: -0.4px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+
+      /* Editions grid */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .card {
+        border-radius: calc(var(--radius) + 6px);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.07),
+          rgba(255, 255, 255, 0.03)
+        );
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .card .img {
+        position: relative;
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .card .img img {
+        width: 100%;
+        aspect-ratio: 16/10;
+        object-fit: cover;
+      }
+      .badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900;
+        background: rgba(99, 102, 241, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+      }
+      .badge.pink {
+        background: rgba(236, 72, 153, 0.9);
+      }
+      .body {
+        padding: 16px;
+      }
+      .body h3 {
+        margin: 0 0 8px;
+        letter-spacing: -0.3px;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 12px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .price {
+        font-weight: 1000;
+        font-size: 22px;
+      }
+      .per {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+        font-weight: 800;
+      }
+      .tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .tag {
+        font-size: 12px;
+        font-weight: 900;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.03);
+        padding: 6px 10px;
+        border-radius: 999px;
+        color: rgba(238, 242, 255, 0.85);
+      }
+
+      /* Footer */
+      footer {
+        padding: 22px 0;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-weight: 700;
+        font-size: 13px;
+      }
+      .foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      /* Responsive */
+      @media (max-width: 860px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .links a:not(.btn) {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="container nav">
+        <a class="brand" href="#top">
+          <span class="mark">
+            <img src="8Bit.png" alt="8Bit Club Logo" />
+          </span>
+          <span>The Magazine Club</span>
+        </a>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <h1>Pre-order our Lastest SuperHero Edition.</h1>
+            <p class="sub">
+              Official IIIT-B's SuperHero Magazine Edition with lot of fun content and an exclusive comicstrip.
+            </p>
+            <div class="cta">
+              <a class="btn primary" href="#editions">Browse editions</a>
+            </div>
+          </div>
+
+          <div class="hero-card">
+            <img src="CP2.png" alt="Featured magazine cover" />
+            <div class="cap">
+              <div>
+                <p class="small">Featured</p>
+                <p class="strong">SuperHero Edition</p>
+              </div>
+              <!-- Link to SuperHero form -->
+              <a
+                class="btn"
+                href="https://docs.google.com/forms/d/e/1FAIpQLScUSvANnryVko3knLAcIj9W3bPCmlOMmlBsc41Xl9b9my08OQ/viewform?usp=dialog"
+                target="_blank"
+                rel="noreferrer"
+                >Get it</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EDITIONS -->
+      <section id="editions">
+        <div class="container">
+          <div class="head">
+            <div>
+              <h2>Editions</h2>
+            </div>
+          </div>
+
+          <div class="grid">
+            <!-- Edition 1 -->
+            <article class="card">
+              <div class="img">
+                <img src="CP2.png" alt="Edition 1 cover" />
+                <span class="badge">Latest</span>
+              </div>
+              <div class="body">
+                <h3>SuperHero Edition</h3>
+                <div class="row">
+                  <div>
+                    <span class="price">₹280</span>
+                    <span class="per">per copy</span>
+                  </div>
+                  <div class="tags">
+                    <span class="tag">48 Pages</span>
+                  </div>
+                </div>
+
+                <div class="cta">
+                  <a
+                    class="btn primary"
+                    href="https://docs.google.com/forms/d/e/1FAIpQLScUSvANnryVko3knLAcIj9W3bPCmlOMmlBsc41Xl9b9my08OQ/viewform?usp=dialog"
+                    target="_blank"
+                    rel="noreferrer"
+                    >Pre-order</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <!-- Edition 2 -->
+            <article class="card">
+              <div class="img">
+                <img src="CP1.png" alt="Edition 2 cover" />
+                <span class="badge pink">Popular</span>
+              </div>
+              <div class="body">
+                <h3>Nostalgia Edition</h3>
+
+                <div class="row">
+                  <div>
+                    <span class="price">₹300</span>
+                    <span class="per">per copy</span>
+                  </div>
+                  <div class="tags">
+                    <span class="tag">52 Pages</span>
+                  </div>
+                </div>
+
+                <div class="cta">
+                  <a
+                    class="btn primary"
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSfwxGP2yion9CgqxYcZJud8xnDn4pt-hAW85WxARED4LrFbiQ/viewform?usp=dialog"
+                    target="_blank"
+                    rel="noreferrer"
+                    >Pre-order</a
+                  >
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="container foot">
+          <div>8Bit</div>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>
